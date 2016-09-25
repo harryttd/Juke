@@ -1,14 +1,18 @@
 'use strict';
 
-import React, { Component } from 'react';
-import SongsContainer from '../containers/SongsContainer';
+import React from 'react';
+import Songs from '../components/Songs';
 
-export default ({ album }) => (
+export default ({ album, currentSong, isPlaying, toggle }) => (
   <div className="album">
     <div>
       <h3>{ album.name }</h3>
       <img src={ album.imageUrl } className="img-thumbnail" />
     </div>
-    <SongsContainer songs={album.songs} />
+    <Songs 
+      songs={album.songs}
+      currentSong={currentSong} 
+      isPlaying={isPlaying} 
+      toggle={toggle} />
   </div>
 );

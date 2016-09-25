@@ -1,24 +1,61 @@
 'use strict';
 
-import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import Player from '../components/Player';
-import { nextSong, prevSong, pause, play, seek } from '../action-creators/player';
+import AUDIO from '../audio';
 
-const mapStateToProps = ({ currentSong, currentSongList, isPlaying, progress }) => ({
-  currentSong,
-  currentSongList,
-  isPlaying,
-  progress
-});
+export default class PlayerContainer extends Component {
 
-const mapDispatchToProps = dispatch => ({
-  next: () => dispatch(nextSong()),
-  prev: () => dispatch(prevSong()),
-  toggle: isPlaying => isPlaying ? dispatch(pause()) : dispatch(play()),
-  scrub: evt => dispatch(seek(evt.nativeEvent.offsetX / evt.target.clientWidth))
-});
+  constructor (props) {
+    super(props);
+    this.state = {
+      progress: 0
+    };
+  }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Player);
+  componentDidMount () {
+    AUDIO.addEventListener('ended', () => 
+      this.next());
+    AUDIO.addEventListener('timeupdate', () => 
+      this.setProgress(AUDIO.currentTime / AUDIO.duration));
+  }
+
+  setProgress () {
+    
+  }
+
+  next () {
+
+  }
+
+  prev () {
+
+  }
+
+  toggle () {
+
+  }
+
+  scrub () {
+
+  }
+
+  render () {
+    return (
+      <Player 
+        next={() => next()}
+        prev={() => prev()}
+        toggle={() => toggle()}
+        toggle={() => scrub()}
+        {...this.props}
+      />
+    );
+  }
+}
+
+// const mapDispatchToProps = dispatch => ({
+//   next: () => dispatch(nextSong()),
+//   prev: () => dispatch(prevSong()),
+//   toggle: isPlaying => isPlaying ? dispatch(pause()) : dispatch(play()),
+//   scrub: evt => dispatch(seek(evt.nativeEvent.offsetX / evt.target.clientWidth))
+// });
