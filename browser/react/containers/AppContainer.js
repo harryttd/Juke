@@ -37,7 +37,7 @@ export default class AppContainer extends Component {
     this.prev = this.prev.bind(this);
   }
 
-  componentDidMount () {    
+  componentDidMount () {
     axios
       .get('/api/albums').then(res => res.data)
       .then(albums => albums.map(convertAlbum))
