@@ -1,7 +1,6 @@
 'use strict';
 
 import React from 'react';
-import axios from 'axios';
 
 const convertSong = song => {
   song.audioUrl = `/api/songs/${song.id}/audio`;
@@ -15,11 +14,11 @@ const convertAlbum = album => {
 };
 
 const fetchAlbum = (album, callback) => {
-  // todo: loader? this feels meh
+  
+  // @todo: loader? this feels meh
   callback(album);
-  return axios
-    .get(`/api/albums/${album.id}`)
-    .then(res => res.data)
+  fetch(`/api/albums/${album.id}`)
+    .then(res => res.json())
     .then(album => convertAlbum(album))
     .then(album => callback(album));
 };

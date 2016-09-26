@@ -1,7 +1,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import axios from 'axios';
 
 import initialState from '../initialState';
 import AUDIO from '../audio';
@@ -38,8 +37,8 @@ export default class AppContainer extends Component {
   }
 
   componentDidMount () {
-    axios
-      .get('/api/albums').then(res => res.data)
+    fetch('/api/albums')
+      .then(res => res.json())
       .then(albums => albums.map(convertAlbum))
       .then(albums => this.onLoad(albums));
     
@@ -69,8 +68,8 @@ export default class AppContainer extends Component {
     this.setState({ currentSong, currentSongList });
   }
 
-  go (album) {
-    this.setState({ album });
+  go (selectedAlbum) {
+    this.setState({ selectedAlbum });
   }
 
   startSong (song, list) {
@@ -105,13 +104,13 @@ export default class AppContainer extends Component {
     return (
       <div id="main" className="container-fluid">
         <div className="col-xs-2">
-          <Sidebar go={() => this.go(initialState.album)} />
+          <Sidebar go={() => this.go(initialState.selectedAlbum)} />
         </div>
         <div className="col-xs-10">
           {
-            !!this.state.album.id ?
+            !!this.state.selectedAlbum.id ?
             <Album 
-              album={this.state.album} 
+              album={this.state.selectedAlbum} 
               currentSong={this.state.currentSong}
               isPlaying={this.state.isPlaying}
               toggle={
