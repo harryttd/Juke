@@ -15,13 +15,13 @@ export default ({
   <footer>
     <div>
       <div className="pull-left">
-        <button className="btn btn-default" onClick={() => prev()}>
+        <button className="btn btn-default" onClick={prev}>
           <span className="glyphicon glyphicon-step-backward"></span>
         </button>
-        <button className="btn btn-default" onClick={() => toggle(isPlaying)}>
+        <button className="btn btn-default" onClick={toggle}>
           <span className={isPlaying ? 'glyphicon glyphicon-pause' : 'glyphicon glyphicon-play'}></span>
         </button>
-        <button className="btn btn-default" onClick={() => next()}>
+        <button className="btn btn-default" onClick={next}>
           <span className="glyphicon glyphicon-step-forward"></span>
         </button>
       </div>

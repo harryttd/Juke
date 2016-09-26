@@ -3,6 +3,7 @@ const initialState = {
   albums: [],
   currentSong: {},
   currentSongList: [],
-  isPlaying: false
+  isPlaying: false,
+  progress: 0
 };
 export default initialState;

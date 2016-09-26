@@ -15,6 +15,8 @@ const convertAlbum = album => {
 };
 
 const fetchAlbum = (album, callback) => {
+  // todo: loader? this feels meh
+  callback(album);
   return axios
     .get(`/api/albums/${album.id}`)
     .then(res => res.data)

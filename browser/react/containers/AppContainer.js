@@ -9,11 +9,20 @@ import AUDIO from '../audio';
 import Sidebar from '../components/Sidebar';
 import Albums from '../components/Albums';
 import Album from '../components/Album';
-import PlayerContainer from '../containers/PlayerContainer';
+import Player from '../components/Player';
 
 const convertAlbum = album => {
-    album.imageUrl = `/api/albums/${album.id}/image`;
-    return album;
+  album.imageUrl = `/api/albums/${album.id}/image`;
+  return album;
+};
+
+const mod = (num, m) =>((num % m) + m) % m;
+
+const skip = (interval, { currentSongList, currentSong }) => {
+  let idx = currentSongList.map(song => song.id).indexOf(currentSong.id);
+  idx = mod(idx + interval, currentSongList.length);
+  const next = currentSongList[idx];
+  return [next, currentSongList];
 };
 
 export default class AppContainer extends Component {
@@ -22,6 +31,9 @@ export default class AppContainer extends Component {
     super(props);
     this.state = initialState;
     this.go = this.go.bind(this);
+    this.toggle = this.toggle.bind(this);
+    this.next = this.next.bind(this);
+    this.prev = this.prev.bind(this);
   }
 
   componentDidMount () {    
@@ -29,18 +41,59 @@ export default class AppContainer extends Component {
       .get('/api/albums').then(res => res.data)
       .then(albums => albums.map(convertAlbum))
       .then(albums => this.onLoad(albums));
+    
+    AUDIO.addEventListener('ended', () => 
+      this.next());
+    AUDIO.addEventListener('timeupdate', () => 
+      this.setProgress(AUDIO.currentTime / AUDIO.duration));
   }
 
   onLoad (albums) {
     this.setState({ albums });    
   }
 
+  play () {
+    AUDIO.play();
+    this.setState({ isPlaying: true });
+  }
+
+  pause () {
+    AUDIO.pause();
+    this.setState({ isPlaying: false });
+  }
+
+  load (currentSong, currentSongList) {
+    AUDIO.src = currentSong.audioUrl;
+    AUDIO.load();
+    this.setState({ currentSong, currentSongList });
+  }
+
   go (album) {
     this.setState({ album });
   }
 
-  toggle () {
+  startSong (song, list) {
+    this.pause();
+    this.load(song, list);
+    this.play();
+  }
 
+  toggle () {
+    if (this.state.isPlaying) this.pause();
+    else this.play();
+  }
+
+  next () {
+    this.startSong(...skip(1, this.state));
+  }
+
+  prev () {
+    this.startSong(...skip(-1, this.state));
+  }
+
+  seek (decimal) {
+    AUDIO.currentTime = AUDIO.duration * decimal;
+    this.setProgress(AUDIO.currentTime / AUDIO.duration);
   }
 
   setProgress (progress) {
@@ -60,15 +113,26 @@ export default class AppContainer extends Component {
               album={this.state.album} 
               currentSong={this.state.currentSong}
               isPlaying={this.state.isPlaying}
-              toggle={this.toggle} 
+              toggle={
+                (selectedSong, selectedSongList) => {
+                  if (selectedSong.id !== this.state.currentSong.id)
+                    this.startSong(selectedSong, selectedSongList);
+                  else this.toggle();
+                }
+              }
             /> :
             <Albums albums={this.state.albums} go={this.go} />
         }
         </div>
-        <PlayerContainer
+        <Player
           currentSong={this.state.currentSong}
           currentSongList={this.state.currentSongList}
-          isPlaying={this.state.isPlaying} 
+          isPlaying={this.state.isPlaying}
+          progress={this.state.progress}
+          next={this.next}
+          prev={this.prev}
+          toggle={this.toggle}
+          scrub={evt => this.seek(evt.nativeEvent.offsetX / evt.target.clientWidth)} 
         />
       </div>
     );
