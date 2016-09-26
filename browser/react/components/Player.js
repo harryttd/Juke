@@ -13,7 +13,7 @@ export default ({
   scrub
 }) => (
   <footer>
-    <div>
+    <div style={!currentSong.id ? {display: 'none'} : null}>
       <div className="pull-left">
         <button className="btn btn-default" onClick={prev}>
           <span className="glyphicon glyphicon-step-backward"></span>
