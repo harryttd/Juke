@@ -30,6 +30,7 @@ export default class AppContainer extends Component {
   constructor (props) {
     super(props);
     this.state = initialState;
+    
     this.go = this.go.bind(this);
     this.toggle = this.toggle.bind(this);
     this.next = this.next.bind(this);
