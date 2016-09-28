@@ -1,0 +1,10 @@
+.idea
+node_modules
+npm-debug.log
+.DS_Store
+coverage
+**.mp3
+**.m4a
+**.mp4
+server/audio/
+public/bundle.js
