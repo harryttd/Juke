@@ -139,7 +139,7 @@ function importLibrary(iTunesXml) {
 }
 
 // [Artist, Album, Song, ArtistSong]: [...findOrCreate<table: String>]
-const [Artist, Album, Song, ArtistSong] = ['artists', 'albums', 'songs', 'artistSong']
+const Results = ['artists', 'albums', 'songs', 'artistSong']
       .map(table => {
           // findOrCreate<table: String>(columns: { ...[key]: value }) ~> id: Integer
           //
@@ -173,7 +173,7 @@ const [Artist, Album, Song, ArtistSong] = ['artists', 'albums', 'songs', 'artist
                                    replacements: values,
                                    type: 'INSERT'
                                  }))
-                 .then (results => (++findOrCreate.created, results[0].id))
+                 .then(results => (++findOrCreate.created, results[0].id))
                  .catch(err => {
                    log.error `warning: ${err.message}`
                    log.error `  in findOrCreate for ${key} into ${table}`
@@ -194,6 +194,10 @@ const [Artist, Album, Song, ArtistSong] = ['artists', 'albums', 'songs', 'artist
         findOrCreate.table = table
         return findOrCreate
       })
+const Artist = Results[0], 
+      Album = Results[1], 
+      Song = Results[2], 
+      ArtistSong = Results[3]
 
 // Sequelize uses a column pair as the primary key of its join table, so we'd better select
 // that and not id.
