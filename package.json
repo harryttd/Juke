@@ -12,6 +12,7 @@
     "postinstall": "npm run db-init"
   },
   "dependencies": {
+    "axios": "^0.15.2",
     "babel": "^5.8.38",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
