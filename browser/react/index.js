@@ -2,8 +2,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Main from './main.js';
+
 ReactDOM.render(
-  <p>Hello React</p>,
+  <Main />,
   document.getElementById('app')
 );
-console.log('Hello React');
