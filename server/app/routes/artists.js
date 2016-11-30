@@ -18,7 +18,7 @@ router.param('artistId', function (req, res, next, id) {
     if (!artist) {
       const err = Error('Artist not found');
       err.status = 404;
-      throw err
+      throw err;
     }
     req.artist = artist;
     next();

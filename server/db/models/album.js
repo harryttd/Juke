@@ -2,7 +2,7 @@
 
 const db = require('../db');
 const DataTypes = db.Sequelize;
-const unique = require('./plugins/unique-through')
+const unique = require('./plugins/unique-through');
 
 module.exports = db.define('album', {
 
