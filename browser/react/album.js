@@ -7,35 +7,30 @@ class Album extends React.Component {
 		super(props);
 	}
 
-	albumNames(){
-		return this.props.albums.map(album => {
-			return album.name;
-		});
-	}
-
-	countSongs(){
-		const counter = []
-		this.props.albums.forEach(album => {
-			counter.push(album.songs.length)
-		});
-		return counter;
-
-	}
 	render() {
 		return (
-			<div className="col-xs-4">
-				<a className="thumbnail" href="#">
-					<img src="http://placeholdit.imgix.net/~text?txtsize=33&txt=ALBUMtwoIMAGE&w=300&h=300" />
-					<div className="caption">
-						<h5>
-							<span>{this.albumNames()[this.props.albumNum]}</span>
-						</h5>
-						<small>{this.countSongs()[this.props.albumNum]} songs</small>
-					</div>
-				</a>
+			<div>
+				{
+					this.props.albums.map((album) => {
+						return (
+							<div key={album.id} className="col-xs-4 responsive">
+								<a className="thumbnail" href="#">
+									<img src={'/api/songs/' + album.songs[0].id + '/image'}/>
+									<div className="caption">
+										<h5>
+											<span>{album.name}</span>
+										</h5>
+										<small>{album.songs.length} songs</small>
+									</div>
+								</a>
+							</div>
+						)
+					})
+				}
 			</div>
 		)
 	}
 }
+
 
 export default Album;
