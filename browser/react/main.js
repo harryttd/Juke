@@ -5,28 +5,43 @@ import ReactDOM from 'react-dom';
 import Sidebar from './sidebar.js';
 import Footer from './footer.js';
 import Album from './album.js';
+import SingleAlbum from './singleAlbum.js';
 
 class Main extends React.Component {
 	constructor(props){
 		super(props);
-		this.state = {library: []};
+		this.state = {library: [],
+                  selectedAlbum: {}
+                };
+    this.handleClick = this.handleClick.bind(this)
 	}
 
+    handleClick(album){
+
+    this.setState({selectedAlbum: album})
+
+  }
+
+    
+
+
 	componentDidMount() {
-		const toJson = response => response.data;
-		const log = this.setState({});
 		const logError = console.error.bind(console);
 
 		axios.get('api/albums')
 		.then(albums => albums.data)
-		.then(albumsData => this.setState({library: albumsData }))
+    .then(libraryFromServer =>{
+      libraryFromServer = libraryFromServer.map(library=>{
+        library.imageUrl = `/api/albums/${library.id}/image`;
+        return library;
+      })
+      this.setState({library: libraryFromServer })
+    })
 		.catch(logError);
-
-		// axios.get('api/albums/1/image')
-		// .then(albums => albums.data)
-		// .then(albumImg => )
-		// .catch(logError);
   }
+
+
+
 
 	render() {
 		return (
@@ -35,10 +50,11 @@ class Main extends React.Component {
 				<Sidebar />
 				<Footer />
 
-				<div className="col-xs-10 responsive">
+				<div className="col-xs-10 responsive" >
 					<h3>Albums</h3>
 					<div className="row">
 						<Album albums={this.state.library} />
+            <SingleAlbum albums= {this.state.selectedAlbum}/>
 					</div>
 				</div>
 
