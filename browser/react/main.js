@@ -22,8 +22,6 @@ class Main extends React.Component {
 	}
 
 	componentDidMount() {
-		const logError = console.error.bind(console);
-
 		axios.get('api/albums')
 		.then(albums => albums.data)
     .then(libraryFromServer => {
@@ -33,42 +31,34 @@ class Main extends React.Component {
       });
       this.setState({ library: libraryFromServer });
     })
-		.catch(logError);
+		.catch(console.error.bind(console));
   }
 
 	render() {
 		return (
-			<div>
-
-				<Sidebar />
-				<Footer />
-
-				<div className="col-xs-10" >
-					<h3>Albums</h3>
-					<div className="row">
-						{
-							this.state.selectedAlbum.id
-							?
-								<SingleAlbum clickHandler={this.state.selectedAlbum}/>
-							:
-								<Albums albums={this.state.library} clickHandler={this.handleClick} />
-						}
-					</div>
+			<div id="main" className="container-fluid">
+	      <div className="col-xs-2">
+					<Sidebar />
 				</div>
 
-			</div>
+				<div className="col-xs-10" >
+					{
+						this.state.selectedAlbum.id
+						?
+							<SingleAlbum album={this.state.selectedAlbum}/>
+						:
+							<Albums albums={this.state.library} clickHandler={this.handleClick} />
+					}
+				</div>
+
+				<Footer />
+
+		</div>
 		)
 	}
 }
 
-// { this.state.kittens.map(kitten => <div>{kitten.name}</div>) }
 export default Main;
-
-
-
-
-
-
 
 // const fakeAlbums = [{
 //   name: 'Abbey Road',

@@ -8,11 +8,13 @@ class SingleAlbum extends React.Component {
 	}
 
 	render() {
+		console.log(this.props);
+		const album = this.props.album;
 		return (
 			<div className="album col-xs-10">
 				<div>
-					<h3>NAME SHOULD GO HERE</h3>
-					<img src="https://placeholdit.imgix.net/~text?txtsize=33&txt=IshouldBEanIMAGE&w=300&h=300" className="img-thumbnail" />
+					<h3>{album.name}</h3>
+					<img src={album.imageUrl} className="img-thumbnail" />
 				</div>
 				<table className='table'>
 					<thead>
@@ -32,16 +34,6 @@ class SingleAlbum extends React.Component {
 							</td>
 							<td>I SHOULD BE A SONG NAME</td>
 							<td>I SHOULD BE A STRING OF THIS SONG'S ARTISTS</td>
-							<td>I SHOULD BE A SONG GENRE</td>
-						</tr>
-						<tr>
-							<td>
-								<button className="btn btn-default btn-xs">
-									<span className="glyphicon glyphicon-play"></span>
-								</button>
-							</td>
-							<td>I SHOULD BE ANOTHER SONG NAME</td>
-							<td>I SHOULD BE A STRING OF THAT SONG'S ARTISTS</td>
 							<td>I SHOULD BE A SONG GENRE</td>
 						</tr>
 					</tbody>
