@@ -16,11 +16,12 @@ export default class Main extends React.Component {
 			library: [],
       selectedAlbum: {},
 			currentSong: {},
+			currentSongsAlbum: {},
 			isPlaying: false,
 			progress: 0
     };
     this.handleClick = this.handleClick.bind(this);
-		this.resetSelectedAlbum = this.resetSelectedAlbum.bind(this);
+		this.getAllAlbums = this.getAllAlbums.bind(this);
 		this.playSong = this.playSong.bind(this);
 		this.toggleSong = this.toggleSong.bind(this);
 		this.next = this.next.bind(this);
@@ -39,6 +40,10 @@ export default class Main extends React.Component {
       this.setState({ library: libraryFromServer });
     })
 		.catch(console.error.bind(console));
+
+		// document.addEventListener("onKeyUp", (event) => {
+		// 	console.log(event);
+		// });
 
 		audio.addEventListener('ended', () => this.autoNext());
 
@@ -59,7 +64,7 @@ export default class Main extends React.Component {
 		.catch(console.error.bind(console));
 	}
 
-	resetSelectedAlbum() {
+	getAllAlbums() {
 		this.setState({ selectedAlbum: {} });
 	}
 
@@ -67,10 +72,6 @@ export default class Main extends React.Component {
 		audio.src = song.url;
 		audio.load();
 		audio.play();
-		this.setState({
-			currentSong: song,
-			isPlaying: true
-		});
 	}
 
 	toggleSong(song) {
@@ -78,11 +79,18 @@ export default class Main extends React.Component {
 			this.state.isPlaying ? audio.pause() : audio.play();
 			this.setState({ isPlaying: !this.state.isPlaying });
 		}
-		else this.playSong(song);
+		else {
+			this.setState({
+				currentSongsAlbum: this.state.selectedAlbum,
+				currentSong: song,
+				isPlaying: true
+			});
+			this.playSong(song);
+		}
 	}
 
 	autoNext() {
-		const songs = this.state.selectedAlbum.songs;
+		const songs = this.state.currentSongsAlbum.songs;
 		let songToPlay;
 		songs.forEach((song, i) => {
 			if (song.id === this.state.currentSong.id) {
@@ -90,11 +98,12 @@ export default class Main extends React.Component {
 				else songToPlay = songs[0];
 			}
 		});
+		this.setState({ currentSong: songToPlay });
 		this.playSong(songToPlay);
 	}
 
 	next() {
-		const songs = this.state.selectedAlbum.songs;
+		const songs = this.state.currentSongsAlbum.songs;
 		songs.forEach((song, i) => {
 			if (song.id === this.state.currentSong.id) {
 				if (songs[i + 1]) this.toggleSong(songs[i + 1]);
@@ -104,7 +113,7 @@ export default class Main extends React.Component {
 	}
 
 	prev() {
-		const songs = this.state.selectedAlbum.songs;
+		const songs = this.state.currentSongsAlbum.songs;
 		songs.forEach((song, i) => {
 			if (song.id === this.state.currentSong.id) {
 				if (songs[i - 1]) this.toggleSong(songs[i - 1]);
@@ -117,16 +126,16 @@ export default class Main extends React.Component {
 		return (
 			<div id="main" className="container-fluid">
 	      <div className="col-xs-2">
-					<Sidebar getAllAlbums={ this.resetSelectedAlbum } />
+					<Sidebar getAllAlbums={ this.getAllAlbums } />
 				</div>
 
 				<div className="col-xs-10" >
 					{
 						this.state.selectedAlbum.id
 						?
-							<SingleAlbum album={ this.state.selectedAlbum } toggleSong={ this.toggleSong } currentSong={ this.state.currentSong } isPlaying={ this.state.isPlaying } />
+						<SingleAlbum album={ this.state.selectedAlbum } toggleSong={ this.toggleSong } currentSong={ this.state.currentSong } isPlaying={ this.state.isPlaying } />
 						:
-							<Albums albums={ this.state.library } clickHandler={ this.handleClick } />
+						<Albums albums={ this.state.library } clickHandler={ this.handleClick } />
 					}
 				</div>
 
