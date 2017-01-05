@@ -1,24 +1,31 @@
 'use strict';
 import axios from 'axios';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Sidebar from './sidebar.js';
 import Footer from './footer.js';
-import Albums from './album.js';
+import Albums from './albums.js';
 import SingleAlbum from './singleAlbum.js';
 
-class Main extends React.Component {
+const audio = document.createElement('audio');
+
+export default class Main extends React.Component {
+
 	constructor(props){
 		super(props);
 		this.state = {
 			library: [],
-      selectedAlbum: {}
+      selectedAlbum: {},
+			currentSong: {},
+			isPlaying: false,
+			progress: 0
     };
-    this.handleClick = this.handleClick.bind(this)
-	}
-
-  handleClick(album){
-  	this.setState({selectedAlbum: album});
+    this.handleClick = this.handleClick.bind(this);
+		this.resetSelectedAlbum = this.resetSelectedAlbum.bind(this);
+		this.playSong = this.playSong.bind(this);
+		this.toggleSong = this.toggleSong.bind(this);
+		this.next = this.next.bind(this);
+		this.prev = this.prev.bind(this);
+		this.autoNext = this.autoNext.bind(this);
 	}
 
 	componentDidMount() {
@@ -32,33 +39,103 @@ class Main extends React.Component {
       this.setState({ library: libraryFromServer });
     })
 		.catch(console.error.bind(console));
+
+		audio.addEventListener('ended', () => this.autoNext());
+
+		audio.addEventListener('timeupdate', () => {
+	    this.setState({
+	      progress: 100 * audio.currentTime / audio.duration
+	    });
+		});
   }
+
+	handleClick(albumId){
+		axios.get(`api/albums/${albumId}`)
+		.then(res => res.data)
+		.then(album => {
+			album.imageUrl = `/api/albums/${album.id}/image`;
+			this.setState({ selectedAlbum: album });
+		})
+		.catch(console.error.bind(console));
+	}
+
+	resetSelectedAlbum() {
+		this.setState({ selectedAlbum: {} });
+	}
+
+	playSong(song) {
+		audio.src = song.url;
+		audio.load();
+		audio.play();
+		this.setState({
+			currentSong: song,
+			isPlaying: true
+		});
+	}
+
+	toggleSong(song) {
+		if (song.id === this.state.currentSong.id) {
+			this.state.isPlaying ? audio.pause() : audio.play();
+			this.setState({ isPlaying: !this.state.isPlaying });
+		}
+		else this.playSong(song);
+	}
+
+	autoNext() {
+		const songs = this.state.selectedAlbum.songs;
+		let songToPlay;
+		songs.forEach((song, i) => {
+			if (song.id === this.state.currentSong.id) {
+				if (songs[i + 1]) songToPlay = songs[i + 1];
+				else songToPlay = songs[0];
+			}
+		});
+		this.playSong(songToPlay);
+	}
+
+	next() {
+		const songs = this.state.selectedAlbum.songs;
+		songs.forEach((song, i) => {
+			if (song.id === this.state.currentSong.id) {
+				if (songs[i + 1]) this.toggleSong(songs[i + 1]);
+				else this.toggleSong(songs[0]);
+			}
+		});
+	}
+
+	prev() {
+		const songs = this.state.selectedAlbum.songs;
+		songs.forEach((song, i) => {
+			if (song.id === this.state.currentSong.id) {
+				if (songs[i - 1]) this.toggleSong(songs[i - 1]);
+				else this.toggleSong(songs[songs.length - 1]);
+			}
+		});
+	}
 
 	render() {
 		return (
 			<div id="main" className="container-fluid">
 	      <div className="col-xs-2">
-					<Sidebar />
+					<Sidebar getAllAlbums={ this.resetSelectedAlbum } />
 				</div>
 
 				<div className="col-xs-10" >
 					{
 						this.state.selectedAlbum.id
 						?
-							<SingleAlbum album={this.state.selectedAlbum}/>
+							<SingleAlbum album={ this.state.selectedAlbum } toggleSong={ this.toggleSong } currentSong={ this.state.currentSong } isPlaying={ this.state.isPlaying } />
 						:
-							<Albums albums={this.state.library} clickHandler={this.handleClick} />
+							<Albums albums={ this.state.library } clickHandler={ this.handleClick } />
 					}
 				</div>
 
-				<Footer />
+				<Footer currentSong={ this.state.currentSong } toggleSong={ this.toggleSong } next={ this.next } prev={ this.prev } isPlaying={ this.state.isPlaying } progress={ this.state.progress } />
 
 		</div>
-		)
+	);
 	}
 }
-
-export default Main;
 
 // const fakeAlbums = [{
 //   name: 'Abbey Road',

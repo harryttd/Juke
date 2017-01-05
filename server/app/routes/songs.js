@@ -8,8 +8,8 @@ const urlParse = require('url').parse;
 const models = require('../../db/models');
 const Song = models.Song;
 const request = require('request');
-const musicMetadata = require('musicmetadata')
-const fs = require('fs')
+const musicMetadata = require('musicmetadata');
+const fs = require('fs');
 
 module.exports = router;
 
@@ -25,7 +25,7 @@ router.param('songId', function (req, res, next, id) {
     if (!song) {
       const err = Error('Song not found');
       err.status = 404;
-      throw err
+      throw err;
     }
     req.song = song;
     next();
@@ -39,27 +39,26 @@ router.get('/:songId', function (req, res) {
 });
 
 function open(url) {
-  const parsed = urlParse(url)
-  return parsed.protocol === 'file:'?
+  const parsed = urlParse(url);
+  return parsed.protocol === 'file:' ?
     fs.createReadStream(decodeURIComponent(parsed.path))
-    : request(url)
+    : request(url);
 }
 
 router.get('/:songId/image', function (req, res, next) {
   musicMetadata(open(req.song.url), function (err, metadata) {
-    if (err) { return next(err) }
-    const pic = metadata.picture[0]
-    pic? res
+    if (err) { return next(err) };
+    const pic = metadata.picture[0];
+    pic ? res
       .set('Content-Type', mime.lookup(pic.format))
       .send(pic.data)
-      : res.redirect('/default-album.jpg')
-  })
+      : res.redirect('/default-album.jpg');
+  });
 });
 
 router.get('/:songId/audio', function (req, res, next) {
-  const url = urlParse(req.song.url)
-  url.protocol === 'file:'?
+  const url = urlParse(req.song.url);
+  url.protocol === 'file:' ?
     res.sendFile(decodeURIComponent(url.path))
-    : res.redirect(req.song.url)
+    : res.redirect(req.song.url);
 });
-

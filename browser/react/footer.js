@@ -1,36 +1,40 @@
 'use strict';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-class Footer extends React.Component {
-	constructor(props){
-		super(props);
-	}
-	render() {
-		return (
-			<footer>
+export default ({ currentSong, toggleSong, next, prev, isPlaying, progress }) => (
 
-        <div className="pull-left">
-          <button className="btn btn-default">
-            <span className="glyphicon glyphicon-step-backward"></span>
-          </button>
-          <button className="btn btn-default">
-            <span className="glyphicon glyphicon-play"></span>
-          </button>
-          <button className="btn btn-default">
-            <span className="glyphicon glyphicon-step-forward"></span>
-          </button>
-        </div>
-				
-        <div className="bar">
-          <div className="progress">
-            <div className="progress-bar"></div>
-          </div>
-        </div>
+	<footer style={ currentSong.id ? null : { display: 'none' } }>
 
-      </footer>
-		)
-	}
-}
+		<div className="pull-left">
+			<button onClick={ prev } className="btn btn-default">
+				<span className="glyphicon glyphicon-step-backward" />
+			</button>
+			<button onClick={ () => toggleSong(currentSong) } className="btn btn-default">
+				<span className={ currentSong && isPlaying ? "glyphicon glyphicon-pause" : "glyphicon glyphicon-play" } />
+			</button>
+			<button onClick={ next } className="btn btn-default">
+				<span className="glyphicon glyphicon-step-forward" />
+			</button>
+		</div>
 
-export default Footer;
+		<div className="bar">
+			<div className="progress">
+				<div className="progress-bar" style={{ width: `${progress}%` }} />
+			</div>
+		</div>
+
+	</footer>
+);
+
+// class Footer extends React.Component {
+//
+// 	render() {
+// 		const { currentSong, toggleSong, next, prev, isPlaying, progress } = this.props;
+//
+// 		return (
+//
+// 		);
+// 	}
+// }
+//
+// export default Footer;

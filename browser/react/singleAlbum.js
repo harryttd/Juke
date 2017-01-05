@@ -1,47 +1,58 @@
 'use strict';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-class SingleAlbum extends React.Component {
-	constructor(props){
-		super(props);
-	}
+export default ({ album, toggleSong, currentSong, isPlaying }) => (
 
-	render() {
-		console.log(this.props);
-		const album = this.props.album;
-		return (
-			<div className="album col-xs-10">
-				<div>
-					<h3>{album.name}</h3>
-					<img src={album.imageUrl} className="img-thumbnail" />
-				</div>
-				<table className='table'>
-					<thead>
-						<tr>
-							<th></th>
-							<th>Name</th>
-							<th>Artists</th>
-							<th>Genre</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
+	<div className="album col-xs-10">
+		<div>
+			<h3>{ album.name }</h3>
+			<img src={ album.imageUrl } className="img-thumbnail" />
+		</div>
+		<table className="table">
+			<thead>
+				<tr>
+					<th />
+					<th>Name</th>
+					<th>Artists</th>
+					<th>Genre</th>
+				</tr>
+			</thead>
+			<tbody>
+				{
+					album.songs && album.songs.map(song => (
+						<tr key={ song.id } className={ song.id === currentSong.id ? 'active' : '' } >
 							<td>
-								<button className="btn btn-default btn-xs">
-									<span className="glyphicon glyphicon-play"></span>
+								<button onClick={() => toggleSong(song) } className="btn btn-default btn-xs">
+									<span className={
+										song.id === currentSong.id && isPlaying ?  "glyphicon glyphicon-pause" : "glyphicon glyphicon-play"
+										} />
 								</button>
 							</td>
-							<td>I SHOULD BE A SONG NAME</td>
-							<td>I SHOULD BE A STRING OF THIS SONG'S ARTISTS</td>
-							<td>I SHOULD BE A SONG GENRE</td>
+							<td>{ song.name }</td>
+							<td>
+								<span>
+									{ song.artists ? song.artists.map(artist => artist.name).join(', ') : null}
+								</span>
+							</td>
+							<td>{ song.genre }</td>
 						</tr>
-					</tbody>
-				</table>
-			</div>
-		)
+					))
+				}
+			</tbody>
+		</table>
+	</div>
+);
 
-	}
-}
-
-export default SingleAlbum;
+// class SingleAlbum extends React.Component {
+//
+// 	render() {
+// 		const { album, toggleSong, currentSong, isPlaying } = this.props;
+// 		const songs = album.songs;
+//
+// 		return (
+//
+// 		);
+// 	}
+// }
+//
+// export default SingleAlbum;
