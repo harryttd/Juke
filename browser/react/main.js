@@ -2,7 +2,7 @@
 import axios from 'axios';
 import React from 'react';
 import Sidebar from './sidebar.js';
-import Footer from './footer.js';
+import Player from './player.js';
 import Albums from './albums.js';
 import SingleAlbum from './singleAlbum.js';
 
@@ -43,7 +43,7 @@ export default class Main extends React.Component {
 		.catch(console.error.bind(console));
 
 		// Trying to get left and right keys to work.
-		// document.body.addEventListener("keydown", (event) => {
+		// document.body.addEventListener("keyup", (event) => {
 		// 	console.log(event);
 		// 	if (event.code === 'ArrowRight') this.next();
 		// 	else if (event.code === 'ArrowLeft') this.prev();
@@ -153,7 +153,7 @@ export default class Main extends React.Component {
 					}
 				</div>
 
-				<Footer currentSong={ this.state.currentSong } toggleSong={ this.toggleSong } next={ this.next } prev={ this.prev } stop={ this.stop } isPlaying={ this.state.isPlaying } progress={ this.state.progress } />
+				<Player currentSong={ this.state.currentSong } toggleSong={ this.toggleSong } next={ this.next } prev={ this.prev } stop={ this.stop } isPlaying={ this.state.isPlaying } progress={ this.state.progress } />
 
 		</div>
 	);
