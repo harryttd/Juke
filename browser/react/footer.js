@@ -3,9 +3,9 @@ import React from 'react';
 
 export default ({ currentSong, toggleSong, next, prev, isPlaying, progress }) => (
 
-	<footer style={ currentSong.id ? null : { display: 'none' } }>
+	<footer>
 
-		<div className="pull-left">
+		<div className="pull-left" style={ currentSong.id ? null : { pointerEvents: 'none', opacity: 0.4 }}>
 			<button onClick={ prev } className="btn btn-default">
 				<span className="glyphicon glyphicon-step-backward" />
 			</button>
