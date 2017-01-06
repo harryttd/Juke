@@ -26,6 +26,7 @@ export default class Main extends React.Component {
 		this.toggleSong = this.toggleSong.bind(this);
 		this.next = this.next.bind(this);
 		this.prev = this.prev.bind(this);
+		this.stop = this.stop.bind(this);
 		this.autoNext = this.autoNext.bind(this);
 	}
 
@@ -41,8 +42,11 @@ export default class Main extends React.Component {
     })
 		.catch(console.error.bind(console));
 
-		// document.addEventListener("onKeyUp", (event) => {
+		// Trying to get left and right keys to work.
+		// document.body.addEventListener("keydown", (event) => {
 		// 	console.log(event);
+		// 	if (event.code === 'ArrowRight') this.next();
+		// 	else if (event.code === 'ArrowLeft') this.prev();
 		// });
 
 		audio.addEventListener('ended', () => this.autoNext());
@@ -122,6 +126,16 @@ export default class Main extends React.Component {
 		});
 	}
 
+	stop() {
+		audio.pause();
+		audio.currentTime = 0;
+		this.setState({
+			currentSong: {},
+			currentSongsAlbum: {},
+			isPlaying: false
+		});
+	}
+
 	render() {
 		return (
 			<div id="main" className="container-fluid">
@@ -139,7 +153,7 @@ export default class Main extends React.Component {
 					}
 				</div>
 
-				<Footer currentSong={ this.state.currentSong } toggleSong={ this.toggleSong } next={ this.next } prev={ this.prev } isPlaying={ this.state.isPlaying } progress={ this.state.progress } />
+				<Footer currentSong={ this.state.currentSong } toggleSong={ this.toggleSong } next={ this.next } prev={ this.prev } stop={ this.stop } isPlaying={ this.state.isPlaying } progress={ this.state.progress } />
 
 		</div>
 	);

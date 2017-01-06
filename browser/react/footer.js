@@ -1,7 +1,7 @@
 'use strict';
 import React from 'react';
 
-export default ({ currentSong, toggleSong, next, prev, isPlaying, progress }) => (
+export default ({ currentSong, toggleSong, next, prev, stop, isPlaying, progress }) => (
 
 	<footer>
 
@@ -12,6 +12,9 @@ export default ({ currentSong, toggleSong, next, prev, isPlaying, progress }) =>
 			<button onClick={ () => toggleSong(currentSong) } className="btn btn-default">
 				<span className={ currentSong && isPlaying ? "glyphicon glyphicon-pause" : "glyphicon glyphicon-play" } />
 			</button>
+		<button onClick={ stop } className="btn btn-default">
+			<span className="glyphicon glyphicon-stop" />
+		</button>
 			<button onClick={ next } className="btn btn-default">
 				<span className="glyphicon glyphicon-step-forward" />
 			</button>
