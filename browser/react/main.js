@@ -14,13 +14,13 @@ export default class Main extends React.Component {
 		super(props);
 		this.state = {
 			library: [],
-      selectedAlbum: {},
+			selectedAlbum: {},
 			currentSong: {},
 			currentSongsAlbum: {},
 			isPlaying: false,
 			progress: 0
-    };
-    this.handleClick = this.handleClick.bind(this);
+		};
+		this.handleClick = this.handleClick.bind(this);
 		this.getAllAlbums = this.getAllAlbums.bind(this);
 		this.playSong = this.playSong.bind(this);
 		this.toggleSong = this.toggleSong.bind(this);
@@ -33,13 +33,13 @@ export default class Main extends React.Component {
 	componentDidMount() {
 		axios.get('api/albums')
 		.then(albums => albums.data)
-    .then(libraryFromServer => {
-      libraryFromServer = libraryFromServer.map(library => {
-        library.imageUrl = `/api/albums/${library.id}/image`;
-        return library;
-      });
-      this.setState({ library: libraryFromServer });
-    })
+		.then(libraryFromServer => {
+			libraryFromServer = libraryFromServer.map(library => {
+				library.imageUrl = `/api/albums/${library.id}/image`;
+				return library;
+			});
+			this.setState({ library: libraryFromServer });
+		})
 		.catch(console.error.bind(console));
 
 		// Trying to get left and right keys to work.
@@ -52,11 +52,11 @@ export default class Main extends React.Component {
 		audio.addEventListener('ended', () => this.autoNext());
 
 		audio.addEventListener('timeupdate', () => {
-	    this.setState({
-	      progress: 100 * audio.currentTime / audio.duration
-	    });
+			this.setState({
+				progress: 100 * audio.currentTime / audio.duration
+			});
 		});
-  }
+	}
 
 	handleClick(albumId){
 		axios.get(`api/albums/${albumId}`)
@@ -139,7 +139,7 @@ export default class Main extends React.Component {
 	render() {
 		return (
 			<div id="main" className="container-fluid">
-	      <div className="col-xs-2">
+				<div className="col-xs-2">
 					<Sidebar getAllAlbums={ this.getAllAlbums } />
 				</div>
 
