@@ -9,3 +9,6 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   module.exports = require(devConfigPath);
 }
+
+// "db-init": "pg-init juke",
+// "postinstall": "npm run db-init"

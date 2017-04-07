@@ -7,9 +7,7 @@
     "start": "webpack -w & nodemon --watch server -e js,html server/start.js",
     "test": "./node_modules/.bin/mocha server/**/*.test.js --reporter spec",
     "test:player": "node_modules/.bin/testem",
-    "seed": "node ./bin/seed",
-    "db-init": "pg-init juke",
-    "postinstall": "npm run db-init"
+    "seed": "node ./bin/seed"
   },
   "dependencies": {
     "axios": "^0.15.2",
