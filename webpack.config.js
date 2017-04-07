@@ -1,6 +1,6 @@
 'use strict';
 
-var webpack = require('webpack');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './browser/react/index.js',
@@ -9,7 +9,7 @@ module.exports = {
     filename: './public/bundle.js'
   },
   context: __dirname,
-  devtool: 'source-map',  
+  devtool: 'source-map',
   module: {
     loaders: [
       {

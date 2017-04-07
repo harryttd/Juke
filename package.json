@@ -1,7 +1,7 @@
 {
   "name": "juke",
   "version": "1.0.0",
-  "description": "A generated project at Fullstack Academy",
+  "description": "A project built at Fullstack Academy",
   "main": "server/start.js",
   "scripts": {
     "start": "webpack -w & nodemon --watch server -e js,html server/start.js",

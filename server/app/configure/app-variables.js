@@ -1,13 +1,13 @@
 'use strict';
 
-var path = require('path');
-var logMiddleware = require('volleyball');
+const path = require('path');
+const logMiddleware = require('volleyball');
 
-var rootPath = path.join(__dirname, '../../../');
-var indexPath = path.join(rootPath, './browser/index.html');
-var faviconPath = path.join(rootPath, './public/favicon.ico');
+const rootPath = path.join(__dirname, '../../../');
+const indexPath = path.join(rootPath, './browser/index.html');
+const faviconPath = path.join(rootPath, './public/favicon.ico');
 
-var env = require(path.join(rootPath, './server/env'));
+const env = require(path.join(rootPath, './server/env'));
 
 module.exports = function (app) {
   app.setValue('env', env);
