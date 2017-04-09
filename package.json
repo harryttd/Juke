@@ -5,7 +5,7 @@
   "main": "server/start.js",
   "scripts": {
     "start": "node server/start.js",
-    "start1": "webpack -w & nodemon --watch server -e js,html server/start.js",
+    "start-watch": "webpack -w & nodemon --watch server -e js,html server/start.js",
     "test": "./node_modules/.bin/mocha server/**/*.test.js --reporter spec",
     "test:player": "node_modules/.bin/testem",
     "seed": "node ./bin/seed",
