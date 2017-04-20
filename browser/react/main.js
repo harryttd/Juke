@@ -9,6 +9,8 @@ import Albums from './albums.js';
 import SingleAlbum from './singleAlbum.js';
 
 const audio = document.createElement('audio');
+// audio.setAttribute("preload", "auto");
+// audio.setAttribute("autoplay", true);
 
 export default class Main extends React.Component {
 
@@ -80,12 +82,13 @@ export default class Main extends React.Component {
     audio.src = song.url;
     audio.load();
     audio.play();
+    // console.log(audio.paused, audio.duration);
   }
 
   toggleSong(song) {
     if (song.id === this.state.currentSong.id) {
       this.state.isPlaying ? audio.pause() : audio.play();
-      this.setState({ isPlaying: !this.state.isPlaying });
+      this.setState((prevState) => ({ isPlaying: !prevState.isPlaying }));
     }
     else {
       this.setState({
@@ -151,7 +154,7 @@ export default class Main extends React.Component {
           {
             this.state.selectedAlbum.id
             ?
-            <SingleAlbum album={ this.state.selectedAlbum } toggleSong={ this.toggleSong } currentSong={ this.state.currentSong } isPlaying={ this.state.isPlaying } />
+            <SingleAlbum audio={ audio } album={ this.state.selectedAlbum } toggleSong={ this.toggleSong } currentSong={ this.state.currentSong } isPlaying={ this.state.isPlaying } />
             :
             <Albums albums={ this.state.library } clickHandler={ this.handleClick } />
           }
